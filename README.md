@@ -1,0 +1,2 @@
+# Rival Plugins for OpenOSRS
+
