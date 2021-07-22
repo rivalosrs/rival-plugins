@@ -11,7 +11,7 @@ plugins {
     checkstyle
 }
 
-project.extra["GithubUrl"] = "https://github.com/rivalosrs/plugins-release"
+project.extra["GithubUrl"] = "https://github.com/rivalosrs/rival-plugins"
 
 apply<BootstrapPlugin>()
 
