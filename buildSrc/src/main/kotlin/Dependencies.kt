@@ -24,6 +24,13 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+object ProjectValues {
+    const val owner = "RivalOSRS"
+    const val repo = "rival-plugins"
+    const val releaseBranch = "main"
+    const val discord = "https://rivalosrs.com/discord"
+}
+
 object ProjectVersions {
     const val openosrsVersion = "4.9.6"
     const val apiVersion = "^1.0.0"

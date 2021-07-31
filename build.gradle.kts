@@ -11,8 +11,6 @@ plugins {
     checkstyle
 }
 
-project.extra["GithubUrl"] = "https://github.com/rivalosrs/rival-plugins"
-
 apply<BootstrapPlugin>()
 
 allprojects {
@@ -33,8 +31,8 @@ allprojects {
 subprojects {
     group = "com.openosrs.externals"
 
-    project.extra["PluginProvider"] = "RivalOSRS"
-    project.extra["ProjectSupportUrl"] = "https://discord.gg/pkXq3jCfmA"
+    project.extra["PluginProvider"] = ProjectValues.owner
+    project.extra["ProjectSupportUrl"] = ProjectValues.discord
     project.extra["PluginLicense"] = "3-Clause BSD License"
 
     repositories {
