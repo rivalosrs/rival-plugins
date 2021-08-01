@@ -29,6 +29,7 @@ include(":eventdebugger")
 include(":nightmarefps")
 include(":rautotyper")
 include(":rdetachedcamera")
+include(":rvasahelper")
 
 for (project in rootProject.children) {
     project.apply {

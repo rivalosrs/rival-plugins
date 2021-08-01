@@ -495,7 +495,8 @@ public class EventDebuggerPlugin extends Plugin
         }
 
         if (config.logToLogger()) {
-            log.info("[onNpcChanged] NPC id: {}, name: {}, NPCComposition id: {}, name: {}", npc.getId(), npc.getName(), npcComposition.getId(), npcComposition.getName());
+            log.info("[onNpcChanged] Before NPC id: {}, name: {}", npcComposition.getId(), npcComposition.getName());
+            log.info("[onNpcChanged] After NPC id: {}, name: {}, animation id: {}, pose id: {}, graphics id: {}", npc.getId(), npc.getName(), npc.getAnimation(), npc.getPoseAnimation(), npc.getGraphic());
         }
     }
 
