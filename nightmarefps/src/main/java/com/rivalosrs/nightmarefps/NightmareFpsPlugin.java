@@ -118,16 +118,6 @@ public class NightmareFpsPlugin extends Plugin {
         {
             return;
         }
-
-        log.debug("button {} pressed!", configButtonClicked.getKey());
-        switch (configButtonClicked.getKey()) {
-            case "hideGameObjects":
-                clientThread.invoke(this::hideObjects);
-                break;
-            case "hideNpcs":
-                clientThread.invoke(this::hideNpcs);
-                break;
-        }
     }
 
     @Subscribe
