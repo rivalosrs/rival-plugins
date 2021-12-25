@@ -14,7 +14,7 @@ plugins {
 apply<BootstrapPlugin>()
 
 allprojects {
-    group = "com.openosrs.externals"
+    group = "com.rivalosrs"
     apply<MavenPublishPlugin>()
 }
 
@@ -29,7 +29,7 @@ allprojects {
 }
 
 subprojects {
-    group = "com.openosrs.externals"
+    group = "com.rivalosrs.externals"
 
     project.extra["PluginProvider"] = ProjectValues.owner
     project.extra["ProjectSupportUrl"] = ProjectValues.discord

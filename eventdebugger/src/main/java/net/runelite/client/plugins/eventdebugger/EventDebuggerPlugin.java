@@ -438,7 +438,7 @@ public class EventDebuggerPlugin extends Plugin
     {
         if(!config.logMenuEntryAdded()) return;
 
-        final MenuEntry menuEntry = event;
+        final MenuEntryAdded menuEntry = event;
 
         if (config.logToGame())
         {
@@ -446,7 +446,7 @@ public class EventDebuggerPlugin extends Plugin
         }
 
         if (config.logToLogger()) {
-            log.info("[onMenuEntryAdded] MenuEntry option: {}, target: {}, id: {}, opcode: {}, actionParam: {}, actionParam1: {}, forceLeftClick: {}", menuEntry.getOption(), menuEntry.getTarget(), menuEntry.getId(), menuEntry.getOpcode(), menuEntry.getActionParam0(), menuEntry.getActionParam1(), menuEntry.isForceLeftClick());
+            log.info("[onMenuEntryAdded] MenuEntry option: {}, target: {}, id: {}, opcode: {}, actionParam: {}, actionParam1: {}, forceLeftClick: {}", menuEntry.getOption(), menuEntry.getTarget(), menuEntry.getIdentifier(), menuEntry.getOpcode(), menuEntry.getActionParam0(), menuEntry.getActionParam1(), menuEntry.isForceLeftClick());
         }
     }
 

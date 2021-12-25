@@ -23,7 +23,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-version = "1.2.0"
+version = "1.2.1"
 
 project.extra["PluginName"] = "Nightmare Fps"
 project.extra["PluginDescription"] = "A plugin to improve fps at Nightmare of Ashihama and Phosani's Nightmare by Rival"
