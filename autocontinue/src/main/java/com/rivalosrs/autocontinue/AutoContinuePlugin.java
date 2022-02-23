@@ -2,25 +2,21 @@ package com.rivalosrs.autocontinue;
 
 import com.google.inject.Provides;
 import java.awt.event.KeyEvent;
-import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
-
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
 import net.runelite.api.events.ConfigButtonClicked;
 import net.runelite.api.events.GameTick;
-import net.runelite.api.events.WidgetClosed;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetID;
 import net.runelite.api.widgets.WidgetInfo;
@@ -29,9 +25,6 @@ import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-
-import java.util.Deque;
-
 import net.runelite.client.plugins.PluginManager;
 import org.pf4j.Extension;
 
@@ -62,12 +55,13 @@ public class AutoContinuePlugin extends Plugin {
   private ExecutorService executorService;
 
   private static final List<ContinueWidget> widgetsToContinue;
+  private static final List<Integer> widgetGroupIdsToIgnore;
 
   static {
     ContinueWidget playerChat = new ContinueWidget(217, 5);
     ContinueWidget npcChat = new ContinueWidget(231, 5);
     ContinueWidget itemChat = new ContinueWidget(WidgetInfo.DIALOG2_SPRITE_CONTINUE);
-    ContinueWidget special = new ContinueWidget(193, 0, 1);
+    ContinueWidget special = new ContinueWidget(193, 0, 2);
     ContinueWidget miniGameDialogue = new ContinueWidget(WidgetInfo.MINIGAME_DIALOG_CONTINUE);
     ContinueWidget sprite = new ContinueWidget(633, 0, 1);
     ContinueWidget levelUp = new ContinueWidget(WidgetInfo.LEVEL_UP_CONTINUE);
@@ -83,6 +77,10 @@ public class AutoContinuePlugin extends Plugin {
         sprite,
         levelUp,
         dialogueNotification
+    );
+
+    widgetGroupIdsToIgnore = List.of(
+        WidgetID.MUSIC_GROUP_ID
     );
   }
 
@@ -122,7 +120,6 @@ public class AutoContinuePlugin extends Plugin {
 
   private void logContinueWidget() {
     clientThread.invokeLater(() -> {
-      Set<Integer> visitedWigets = new HashSet<>();
       Deque<Widget> queue = new LinkedList<>();
 
       queue.addAll(Arrays.asList(client.getWidgetRoots()));
@@ -133,11 +130,11 @@ public class AutoContinuePlugin extends Plugin {
       while (!queue.isEmpty()) {
         Widget widget = queue.poll();
 
-        if (visitedWigets.contains(widget.getId())) {
+        if (widgetGroupIdsToIgnore.contains(WidgetInfo.TO_GROUP(widget.getId()))) {
+          log.debug("Skipping widget ({}) because it's group is marked as to ignore.", widgetFriendlyIdToString(widget));
           continue;
         }
 
-        visitedWigets.add(widget.getId());
         log.debug("Popped widget: {}", widgetToString(widget));
 
         if (widget.getText().toLowerCase().contains("continue")) {
@@ -155,12 +152,24 @@ public class AutoContinuePlugin extends Plugin {
         List<Widget> staticChildren = Arrays.asList(widget.getStaticChildren());
         queue.addAll(staticChildren);
 
-        log.debug("Nested children: {}, dynamic: {}, static: {}", nestedChildren.size(),
-            dynamicChildren.size(), staticChildren.size());
+        String nestedChildrenIds = nestedChildren.stream().map(w -> widgetFriendlyIdToString(w)).collect(Collectors.joining(", "));
+        String dynamicChildrenIds = dynamicChildren.stream().map(w -> widgetFriendlyIdToString(w)).collect(Collectors.joining(", "));
+        String staticChildrenIds = staticChildren.stream().map(w -> widgetFriendlyIdToString(w)).collect(Collectors.joining(", "));
+
+        log.debug("Nested children: ({}) {}, dynamic: ({}) {}, static: ({}) {}", nestedChildren.size(), nestedChildrenIds,
+            dynamicChildren.size(), dynamicChildrenIds, staticChildren.size(), staticChildrenIds);
       }
 
       client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "Debugging widgets finished.", null);
     });
+  }
+
+  private String widgetFriendlyIdToString(Widget widget) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(WidgetInfo.TO_GROUP(widget.getId()));
+    sb.append(".");
+    sb.append(WidgetInfo.TO_CHILD(widget.getId()));
+    return sb.toString();
   }
 
   private String widgetToString(Widget widget) {
