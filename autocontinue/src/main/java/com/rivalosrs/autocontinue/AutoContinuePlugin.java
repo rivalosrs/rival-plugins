@@ -264,7 +264,7 @@ public class AutoContinuePlugin extends Plugin {
   }
 
   private void invokeContinue(Widget widget) {
-    client.invokeMenuAction("", "", 0, MenuAction.WIDGET_TYPE_6.getId(), widget.getIndex(),
+    client.invokeMenuAction("", "", 0, MenuAction.WIDGET_CONTINUE.getId(), widget.getIndex(),
         widget.getId());
   }
 
